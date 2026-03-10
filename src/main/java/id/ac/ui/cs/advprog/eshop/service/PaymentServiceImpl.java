@@ -27,7 +27,13 @@ public class PaymentServiceImpl implements PaymentService {
             if (isValidVoucher(voucherCode)) {
                 status = PaymentStatus.SUCCESS.getValue();
             }
+        } else if (method.equals("BANK_TRANSFER")) {
+        String bankName = paymentData.get("bankName");
+        String referenceCode = paymentData.get("referenceCode");
+        if (bankName != null && !bankName.isEmpty() && referenceCode != null && !referenceCode.isEmpty()) {
+            status = PaymentStatus.SUCCESS.getValue();
         }
+    }
 
         Payment payment = new Payment(UUID.randomUUID().toString(), method, status, paymentData, order);
         paymentRepository.save(payment);
