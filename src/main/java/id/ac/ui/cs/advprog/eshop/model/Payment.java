@@ -10,8 +10,9 @@ public class Payment {
     private String method;
     private String status;
     private Map<String, String> paymentData;
+    private Order order;
 
-    public Payment(String id, String method, String status, Map<String, String> paymentData) {
+    public Payment(String id, String method, String status, Map<String, String> paymentData, Order order) {
         this.id = id;
         this.method = method;
         this.setStatus(status);
@@ -20,6 +21,7 @@ public class Payment {
             throw new IllegalArgumentException();
         }
         this.paymentData = paymentData;
+        this.order = order;
     }
 
     public void setStatus(String status) {

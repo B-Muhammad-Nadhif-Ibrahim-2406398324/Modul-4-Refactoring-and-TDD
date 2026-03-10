@@ -38,6 +38,13 @@ public class PaymentServiceImplTest {
     void setUp() {
         this.orders = new ArrayList<>();
         List<Product> products = new ArrayList<>();
+
+        Product product = new Product();
+        product.setProductId("product-1");
+        product.setProductName("Test Product");
+        product.setProductQuantity(1);
+        products.add(product);
+
         Order order1 = new Order(UUID.randomUUID().toString(), products, 1708560000L, "Safira Sudrajat");
         this.orders.add(order1);
 
@@ -78,9 +85,9 @@ public class PaymentServiceImplTest {
         paymentData.put("voucherCode", "ESHOP1234ABC5678");
         Order order = orders.get(0);
         Payment payment = new Payment(UUID.randomUUID().toString(), "VOUCHER",
-                PaymentStatus.WAITING.getValue(), paymentData);
+                PaymentStatus.WAITING.getValue(), paymentData, order);
 
-        Payment result = paymentService.setStatus(payment, PaymentStatus.SUCCESS.getValue(), order);
+        Payment result = paymentService.setStatus(payment, PaymentStatus.SUCCESS.getValue());
 
         assertEquals(PaymentStatus.SUCCESS.getValue(), result.getStatus());
         assertEquals(OrderStatus.SUCCESS.getValue(), order.getStatus());
@@ -93,9 +100,9 @@ public class PaymentServiceImplTest {
         paymentData.put("voucherCode", "ESHOP1234ABC5678");
         Order order = orders.get(0);
         Payment payment = new Payment(UUID.randomUUID().toString(), "VOUCHER",
-                PaymentStatus.WAITING.getValue(), paymentData);
+                PaymentStatus.WAITING.getValue(), paymentData, order);
 
-        Payment result = paymentService.setStatus(payment, PaymentStatus.REJECTED.getValue(), order);
+        Payment result = paymentService.setStatus(payment, PaymentStatus.REJECTED.getValue());
 
         assertEquals(PaymentStatus.REJECTED.getValue(), result.getStatus());
         assertEquals(OrderStatus.FAILED.getValue(), order.getStatus());

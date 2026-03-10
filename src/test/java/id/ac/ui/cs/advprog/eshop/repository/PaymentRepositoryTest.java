@@ -1,7 +1,9 @@
 package id.ac.ui.cs.advprog.eshop.repository;
 
 import enums.PaymentStatus;
+import id.ac.ui.cs.advprog.eshop.model.Order;
 import id.ac.ui.cs.advprog.eshop.model.Payment;
+import id.ac.ui.cs.advprog.eshop.model.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,21 +18,31 @@ import static org.junit.jupiter.api.Assertions.*;
 public class PaymentRepositoryTest {
     PaymentRepository paymentRepository;
     List<Payment> payments;
+    Order order;
 
     @BeforeEach
     void setUp() {
         paymentRepository = new PaymentRepository();
         payments = new ArrayList<>();
 
+        List<Product> products = new ArrayList<>();
+        Product product = new Product();
+        product.setProductId("product-1");
+        product.setProductName("Test Product");
+        product.setProductQuantity(1);
+        products.add(product);
+
+        this.order = new Order(UUID.randomUUID().toString(), products, 1708560000L, "Safira Sudrajat");
+
         Map<String, String> paymentData = new HashMap<>();
         paymentData.put("voucherCode", "ESHOP1234ABC5678");
 
         Payment payment1 = new Payment(UUID.randomUUID().toString(),
-                "VOUCHER", PaymentStatus.WAITING.getValue(), paymentData);
+                "VOUCHER", PaymentStatus.WAITING.getValue(), paymentData, this.order);
         payments.add(payment1);
 
         Payment payment2 = new Payment(UUID.randomUUID().toString(),
-                "CASH_ON_DELIVERY", PaymentStatus.SUCCESS.getValue(), paymentData);
+                "CASH_ON_DELIVERY", PaymentStatus.SUCCESS.getValue(), paymentData, this.order);
         payments.add(payment2);
     }
 
@@ -52,7 +64,7 @@ public class PaymentRepositoryTest {
         paymentRepository.save(payment);
 
         Payment updatedPayment = new Payment(payment.getId(), payment.getMethod(),
-                "SUCCESS", payment.getPaymentData());
+                "SUCCESS", payment.getPaymentData(), this.order);
         paymentRepository.save(updatedPayment);
 
         Payment result = paymentRepository.findById(payment.getId());
