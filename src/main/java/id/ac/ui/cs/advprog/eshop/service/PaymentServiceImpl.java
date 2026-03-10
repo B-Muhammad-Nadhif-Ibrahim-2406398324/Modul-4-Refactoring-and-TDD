@@ -22,18 +22,11 @@ public class PaymentServiceImpl implements PaymentService {
     public Payment addPayment(Order order, String method, Map<String, String> paymentData) {
         String status = PaymentStatus.REJECTED.getValue();
 
-        if (method.equals("VOUCHER")) {
-            String voucherCode = paymentData.get("voucherCode");
-            if (isValidVoucher(voucherCode)) {
-                status = PaymentStatus.SUCCESS.getValue();
-            }
-        } else if (method.equals("BANK_TRANSFER")) {
-        String bankName = paymentData.get("bankName");
-        String referenceCode = paymentData.get("referenceCode");
-        if (bankName != null && !bankName.isEmpty() && referenceCode != null && !referenceCode.isEmpty()) {
+        if (method.equals("VOUCHER") && isValidVoucher(paymentData.get("voucherCode"))) {
+            status = PaymentStatus.SUCCESS.getValue();
+        } else if (method.equals("BANK_TRANSFER") && isValidBankTransfer(paymentData)) {
             status = PaymentStatus.SUCCESS.getValue();
         }
-    }
 
         Payment payment = new Payment(UUID.randomUUID().toString(), method, status, paymentData, order);
         paymentRepository.save(payment);
@@ -61,6 +54,12 @@ public class PaymentServiceImpl implements PaymentService {
             if (Character.isDigit(c)) digitCount++;
         }
         return digitCount == 8;
+    }
+
+    private boolean isValidBankTransfer(Map<String, String> paymentData) {
+        String bankName = paymentData.get("bankName");
+        String referenceCode = paymentData.get("referenceCode");
+        return bankName != null && !bankName.isEmpty() && referenceCode != null && !referenceCode.isEmpty();
     }
 
     @Override
