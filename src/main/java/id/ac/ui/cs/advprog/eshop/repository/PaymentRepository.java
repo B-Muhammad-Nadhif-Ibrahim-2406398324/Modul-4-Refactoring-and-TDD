@@ -12,23 +12,21 @@ public class PaymentRepository {
 
     public Payment save(Payment payment) {
         for (int i = 0; i < paymentData.size(); i++) {
-            Payment savedPayment = paymentData.get(i);
-            if (savedPayment.getId().equals(payment.getId())) {
+            if (paymentData.get(i).getId().equals(payment.getId())) {
                 paymentData.set(i, payment);
                 return payment;
             }
         }
+
         paymentData.add(payment);
         return payment;
     }
 
     public Payment findById(String id) {
-        for (Payment savedPayment : paymentData) {
-            if (savedPayment.getId().equals(id)) {
-                return savedPayment;
-            }
-        }
-        return null;
+        return paymentData.stream()
+                .filter(p -> p.getId().equals(id))
+                .findFirst()
+                .orElse(null);
     }
 
     public List<Payment> findAll() {
