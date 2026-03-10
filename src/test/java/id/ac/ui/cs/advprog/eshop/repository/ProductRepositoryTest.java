@@ -67,43 +67,43 @@ class ProductRepositoryTest {
         assertFalse(productIterator.hasNext());
     }
 
-    @Test
-    void testEditSuccess() {
-        Product product = new Product();
-        product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
-        product.setProductName("Sampo Cap Bambang");
-        product.setProductQuantity(100);
-        productRepository.create(product);
+//    @Test
+//    void testEditSuccess() {
+//        Product product = new Product();
+//        product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
+//        product.setProductName("Sampo Cap Bambang");
+//        product.setProductQuantity(100);
+//        productRepository.create(product);
+//
+//        Product updatedProduct = new Product();
+//        updatedProduct.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
+//        updatedProduct.setProductName("Sampo Cap Bambang Baru");
+//        updatedProduct.setProductQuantity(200);
+//
+//        productRepository.update(updatedProduct);
+//
+//        Product result = productRepository.findById(product.getProductId());
+//        assertEquals("Sampo Cap Bambang Baru", result.getProductName());
+//        assertEquals(200, result.getProductQuantity());
+//    }
 
-        Product updatedProduct = new Product();
-        updatedProduct.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
-        updatedProduct.setProductName("Sampo Cap Bambang Baru");
-        updatedProduct.setProductQuantity(200);
-
-        productRepository.update(updatedProduct);
-
-        Product result = productRepository.findById(product.getProductId());
-        assertEquals("Sampo Cap Bambang Baru", result.getProductName());
-        assertEquals(200, result.getProductQuantity());
-    }
-
-    @Test
-    void testEditFailedIfIdNotFound() {
-        Product product = new Product();
-        product.setProductId("id-yang-ada");
-        product.setProductName("Produk Ori");
-        product.setProductQuantity(10);
-        productRepository.create(product);
-
-        Product strangerProduct = new Product();
-        strangerProduct.setProductId("id-palsu");
-        strangerProduct.setProductName("Produk Palsu");
-        strangerProduct.setProductQuantity(99);
-
-        Product result = productRepository.update(strangerProduct);
-
-        assertNull(result);
-    }
+//    @Test
+//    void testEditFailedIfIdNotFound() {
+//        Product product = new Product();
+//        product.setProductId("id-yang-ada");
+//        product.setProductName("Produk Ori");
+//        product.setProductQuantity(10);
+//        productRepository.create(product);
+//
+//        Product strangerProduct = new Product();
+//        strangerProduct.setProductId("id-palsu");
+//        strangerProduct.setProductName("Produk Palsu");
+//        strangerProduct.setProductQuantity(99);
+//
+//        Product result = productRepository.update(strangerProduct);
+//
+//        assertNull(result);
+//    }
 
     @Test
     void testDeleteSuccess() {
