@@ -28,3 +28,17 @@ To improve this, I should apply a Base Class approach. I can move the common set
 - Rigidity and Fragility: If CarController remained inside ProductController.java (violating SRP), any change to the Car logic might accidentally break the Product logic because they share the same file and potentially the same dependencies.
 - Tight Coupling: Without DIP, if the Service is hard-coded to use ProductRepository (concrete class), replacing the storage system would require a complete rewrite of the Service layer, making the system very difficult to evolve.
 - Spaghetti Code: Without LSP, forcing Car to inherit from Product just to "save code" would lead to "hacky" fixes where Car might have to throw exceptions for Product methods it doesn't actually support, making the code unpredictable and prone to bugs.
+
+# Reflection 4
+
+1. Based on the questions proposed by Percival (2017), I believe this TDD flow has been highly effective for my development process:
+- Does it give me confidence? Absolutely. For instance, when I implemented the Order model, I already had a test case for testCreateOrderEmptyProduct. This gave me the confidence that my system would never allow an invalid order (one without products) to exist in the database.
+- Does it help me with design? Yes. Writing the tests for OrderRepository first helped me design the Update or Insert logic. I had to decide how the repository should behave when saving an order with an existing ID versus a new one before I even wrote the save() method.
+- Does it stay out of my way? The tests are concise and focused. Because I used Mockito in the Service tests and simple JUnit assertions in the Model/Repository tests, the testing suite remains maintainable and doesn't hinder my productivity.
+
+2. After reviewing the tests for Order, OrderRepository, and OrderService, I can conclude that they successfully follow the F.I.R.S.T. principles:
+- Fast: My tests are extremely fast. The OrderRepositoryTest uses a simple ArrayList in-memory, and OrderServiceTest uses mocks, so there is no slow database or network overhead.
+- Independent: Each test is isolated. In OrderRepositoryTest, I use @BeforeEach to re-initialize the orderRepository and the sample orders list, ensuring that data from one test case doesn't leak into another.
+- Repeatable: The tests are deterministic. Whether I run them on my local machine or a different environment, the results stay the same because they don't depend on external states.
+- Self-Validating: I used clear assertions like assertEquals, assertNull, and assertThrows. The IDE provides a clear green checkmark or a red cross, leaving no room for manual interpretation of the results.
+- Thorough/Timely: My tests are timely because they were created alongside the implementation. They are also thorough; for example, in OrderTest, I didn't just test the "Happy Path" (success), but also ensured that an IllegalArgumentException is thrown when an invalid status like "MEOW" is passed.
